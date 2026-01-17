@@ -1,0 +1,26 @@
+# Unity generated folders
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+UserSettings/
+
+# VS / Rider
+.vs/
+.vscode/
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Build outputs
+*.exe
+*.pdb
+*.mdb
+UnityPlayer.dll
+UnityCrashHandler*.exe
+
+# Keep our native CTF DLL
+!Assets/Plugins/SecretValidation.dll
