@@ -3,44 +3,37 @@ using UnityEngine.UI;
 
 public class Logicscript : MonoBehaviour
 {
-    public int playerscore = 0;
+    public int playerscore;
     public Text scoret;
 
-    // Impossible target (intentional)
     public int targetScore = 3301;
+    private bool flagTriggered;
 
-    private bool flagTriggered = false;
-
-    void Start()
+    private void Start()
     {
-        // Safety check
         if (scoret == null)
         {
             Debug.LogError("Score Text not assigned in Logicscript!");
         }
 
-        // Reset state
         playerscore = 0;
         flagTriggered = false;
 
         if (scoret != null)
+        {
             scoret.text = playerscore.ToString();
+        }
     }
 
-    public void addscore()
+    public void gettheflaghere()
     {
         playerscore++;
 
-        // INTENTIONAL SCORE CAP
-        if (playerscore > 3299)
+        if (scoret != null)
         {
-            playerscore = 3299;
+            scoret.text = playerscore.ToString();
         }
 
-        if (scoret != null)
-            scoret.text = playerscore.ToString();
-
-        // Impossible condition → native DLL
         if (!flagTriggered && playerscore == targetScore)
         {
             flagTriggered = true;
@@ -48,13 +41,8 @@ public class Logicscript : MonoBehaviour
             CTFController ctf = FindObjectOfType<CTFController>();
             if (ctf != null)
             {
-                ctf.GenerateFlagOnce(playerscore);
-            }
-            else
-            {
-                Debug.LogError("CTFController not found in scene!");
+                ctf.RequestFlagFromServer(playerscore);
             }
         }
     }
-  
 }

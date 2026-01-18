@@ -1,42 +1,45 @@
-﻿using System;
-using System.Runtime.InteropServices;
-using UnityEngine;
+﻿using UnityEngine;
+using TMPro;
 
 public class CTFController : MonoBehaviour
 {
-    // Import native function from SecretValidation.dll
-    [DllImport("SecretValidation", CallingConvention = CallingConvention.Cdecl)]
-    private static extern void CalculateFinalFlag(
-        int score,
-        float xPos,
-        string deviceID,
-        IntPtr outBuf,
-        int bufLen
-    );
+    private bool flagGenerated;
+    private TextMeshProUGUI flagText;
 
-    private bool flagGenerated = false;
-
-    public void GenerateFlagOnce(int score)
+    private void Awake()
     {
-        if (flagGenerated)
+       
+        GameObject flagObj = GameObject.Find("FlagText");
+        if (flagObj != null)
+        {
+            flagText = flagObj.GetComponent<TextMeshProUGUI>();
+        }
+
+        if (flagText == null)
+        {
+            Debug.LogError("FlagText not found or missing TextMeshProUGUI!");
+        }
+    }
+
+    public void RequestFlagFromServer(int score)
+    {
+        if (flagGenerated || score != 3301)
             return;
 
         flagGenerated = true;
 
-        float xPos = 0.0f; // deterministic
-        string deviceID = "UNITY_DEVICE"; // deterministic for CTF
+        string flag = "defcon_flag{ACE_OFFLINE_MODE_STUB_8ACAEDEA}";
+        DisplayFlag(flag);
+    }
 
-        IntPtr buffer = Marshal.AllocHGlobal(256);
+    private void DisplayFlag(string flag)
+    {
+        if (flagText == null) return;
 
-        try
-        {
-            CalculateFinalFlag(score, xPos, deviceID, buffer, 256);
-            string flag = Marshal.PtrToStringAnsi(buffer);
-            Debug.Log("FLAG: " + flag);
-        }
-        finally
-        {
-            Marshal.FreeHGlobal(buffer);
-        }
+        flagText.text = flag;
+        flagText.color = new Color(0.7f, 0f, 0f); // Dark red
+        flagText.fontSize = 36;
+        flagText.alignment = TextAlignmentOptions.Center;
+        flagText.enableWordWrapping = true;
     }
 }

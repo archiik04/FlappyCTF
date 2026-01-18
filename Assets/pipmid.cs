@@ -19,7 +19,7 @@ public class Pipmid : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        logic.addscore();
+        logic.gettheflaghere();
 
-    } 
+    }
 }
